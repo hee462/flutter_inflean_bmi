@@ -88,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
                   },
 
 
-                  
+
                   child: Text('결과'))
             ],
           ),
