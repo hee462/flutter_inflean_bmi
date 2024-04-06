@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_obesity/result/result_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -18,11 +19,17 @@ class _MainScreenState extends State<MainScreen> {
 // 메모리 리셋
   @override
   void dispose() {
+    save();
     _heightController.dispose();
     _weightController.dispose();
     super.dispose();
   }
 
+  Future save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('height', double.parse(_heightController.text));
+    await prefs.setDouble('weight', double.parse(_weightController.text));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    if (_fromKey.currentState?.validate() == false ) {
+                    if (_fromKey.currentState?.validate() == false) {
                       return;
                     }
 
@@ -80,15 +87,11 @@ class _MainScreenState extends State<MainScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ResultScreen(
-                          height: double.parse(_heightController.text),
-                          weight: double.parse(_weightController.text)
-                        ),
+                            height: double.parse(_heightController.text),
+                            weight: double.parse(_weightController.text)),
                       ),
                     );
                   },
-
-
-
                   child: Text('결과'))
             ],
           ),
